@@ -8,7 +8,7 @@ public class Bullet {
     public static int BULLET_WIDTH = 10;
     public static int BULLET_HEIGHT = 10;
 
-    private int SPEED = 1;
+    private int SPEED = 10;
 
     private Dir dir;
 
@@ -16,21 +16,16 @@ public class Bullet {
 
     public Rectangle bulletTangle;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tankFrame) {
+    private Group group;
+
+    public Bullet(int x, int y, Dir dir, TankFrame tankFrame, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tankFrame = tankFrame;
+        this.group = group;
 
         bulletTangle = new Rectangle(x, y, Bullet.BULLET_WIDTH, Bullet.BULLET_HEIGHT);
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public void paint(Graphics g) {
@@ -54,16 +49,20 @@ public class Bullet {
         g.fillOval(x, y, BULLET_WIDTH, BULLET_HEIGHT);
         g.setColor(color);
 
+        this.bulletTangle.x = x;
+        this.bulletTangle.y = y;
+
         if(x < 0 || x > TankFrame.FRAME_WIDTH || y < 0 || y > TankFrame.FRAME_HEIGHT) {
             tankFrame.bullets.remove(this);
         }
 
-        this.bulletTangle = new Rectangle(x, y, Bullet.BULLET_WIDTH, Bullet.BULLET_HEIGHT);
-
-        tankFrame.repaint();
     }
 
     public void die() {
         tankFrame.bullets.remove(this);
+    }
+
+    public Group getGroup() {
+        return group;
     }
 }

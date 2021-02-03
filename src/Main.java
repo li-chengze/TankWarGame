@@ -7,5 +7,14 @@ public class Main {
             tf.enemies.add(new Tank(i * 100, 400, tf, Group.BAD));
         }
         tf.draw();
+
+        while(true) {
+            try {
+                Thread.sleep(25);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            tf.repaint();
+        }
     }
 }

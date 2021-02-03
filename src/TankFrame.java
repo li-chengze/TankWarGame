@@ -51,7 +51,7 @@ public class TankFrame extends Frame {
             for (int i = 0; i < bullets.size(); i++) {
                 Tank enemy = enemies.get(j);
                 Bullet bullet = bullets.get(i);
-                if (enemy.collide(bullet)){
+                if (enemy.getGroup() != bullet.getGroup() && enemy.collide(bullet)){
                     enemy.die();
                     bullet.die();
                 }
