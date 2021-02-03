@@ -12,23 +12,43 @@ public class Tank {
     private static int TANK_HEIGHT = 50;
 
     private Dir dir = Dir.DOWN;
+    private Group group = Group.BAD;
 
-    public Tank(int x, int y, TankFrame tankFrame) {
+    private Rectangle tankRect = null;
+
+    public Tank(int x, int y, TankFrame tankFrame, Group group) {
         this.x = x;
         this.y = y;
         this.tankFrame = tankFrame;
+        this.group = group;
+        if (group == Group.GOOD) {
+            this.tankFrame.addKeyListener(new MyKeyAdapter());
+        }
 
-        this.tankFrame.addKeyListener(new MyKeyAdapter());
+        this.tankRect = new Rectangle(x, y, TANK_WIDTH, TANK_HEIGHT);
     }
 
     public void paint(Graphics g) {
+        Color originColor = g.getColor();
+        Color tankColor = group == Group.GOOD ? Color.GREEN : Color.BLUE;
+        g.setColor(tankColor);
         g.fillRect(x, y, TANK_WIDTH, TANK_HEIGHT);
+        g.setColor(originColor);
     }
 
     private void fire() {
         int bX = x + (TANK_WIDTH / 2);
         int bY = y + (TANK_HEIGHT / 2);
         tankFrame.bullets.add(new Bullet(bX, bY, dir, this.tankFrame));
+    }
+
+    public boolean collide(Bullet bullet) {
+        Rectangle bulletRect = bullet.bulletTangle;
+        return this.tankRect.intersects(bulletRect);
+    }
+
+    public void die() {
+        tankFrame.enemies.remove(this);
     }
 
     class MyKeyAdapter extends KeyAdapter {
@@ -53,6 +73,7 @@ public class Tank {
                     break;
                 default:
             }
+            tankRect = new Rectangle(x, y, TANK_WIDTH, TANK_HEIGHT);
             tankFrame.repaint();
         }
 
